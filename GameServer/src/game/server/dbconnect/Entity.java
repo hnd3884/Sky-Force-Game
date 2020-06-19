@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class Entity {
 	public static ArrayList<String> database = new ArrayList<String>();
-	static final String FILE_URL = "D:/source/java/GameServer/src/Database.txt";
+	static final String FILE_URL = "C:/Users/hoangnd/git/SkyForceGame/GameServer/src/Database.txt";
 	
 	public static void getDatabase() {
 		File file = new File(FILE_URL);

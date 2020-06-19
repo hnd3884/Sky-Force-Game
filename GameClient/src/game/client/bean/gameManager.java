@@ -15,7 +15,6 @@ import game.client.com.Config;
 public class gameManager implements KeyListener {
 
 	public static Player player;
-	//public static Player player2;
 	public static ArrayList<Bullet> bullet;
 	private ArrayList<Enemy> enemies;
 	private volatile LinkedList<Command> queueCommands;
@@ -23,7 +22,7 @@ public class gameManager implements KeyListener {
 	private long current;
 	private long delay;
 	private int health;
-	private int score;
+	//private int score;
 	private boolean start;
 	private String uname;
 	private String gameStatus;
@@ -31,7 +30,11 @@ public class gameManager implements KeyListener {
 	public static List<Player> friends;
 	
 	public int GetScore() {
-		return score;
+		return player.getScore();
+	}
+	
+	public int GetHealth() {
+		return health;
 	}
 
 	public gameManager(String uname) {
@@ -53,7 +56,7 @@ public class gameManager implements KeyListener {
 		this.readyToPlay = boo;
 	}
 	
-	public void PushToQueue(String message) {
+	public void RenderEnemy(String message) {
 		queueCommands.addLast(new Command(null, message));
 	}
 	
@@ -96,7 +99,7 @@ public class gameManager implements KeyListener {
 		delay = 2000;
 
 		health = player.getHealth();
-		score = 0;
+		//score = 0;
 	}
 
 	public void tick() {
@@ -178,7 +181,7 @@ public class gameManager implements KeyListener {
 							
 						}
 						if(bullet.get(j).getUserName() == player.getUserName()) {
-							score = score + 1;
+							player.setScore(player.getScore() + 1);
 							String message = "stt "+player.getUserName()+"|score";
 							Communication.Send(message);
 						}
@@ -189,7 +192,7 @@ public class gameManager implements KeyListener {
 				g.setColor(new Color(189, 227, 188));
 				g.setFont(new Font("calibri", Font.BOLD, 30));
 				g.drawString("Name : " + player.getUserName(), 70, 500);
-				g.drawString("Score : " + score, 70, 530);
+				g.drawString("Score : " + player.getScore(), 70, 530);
 				g.drawString("Health : "+ health, 70, 560);
 			}
 		}

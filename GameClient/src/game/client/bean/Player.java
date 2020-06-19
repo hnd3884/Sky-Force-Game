@@ -18,7 +18,12 @@ public class Player implements KeyListener {
 	private int health;
 	private String userName;
 	private boolean isHost = false;
+	private int score = 0;
 	// private Socket socket;
+	
+	public void Score() {
+		score += 1;
+	}
 
 	public void SetUserName(String username) {
 		this.userName = username;
@@ -148,5 +153,11 @@ public class Player implements KeyListener {
 
 	public void setHost(boolean isHost) {
 		this.isHost = isHost;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
 	}
 }

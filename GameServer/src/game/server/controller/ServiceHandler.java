@@ -18,7 +18,7 @@ public class ServiceHandler extends Thread {
 	private long current;
 
 	public ServiceHandler() {
-		
+
 	}
 
 	public void setRoom(Room room) {
@@ -39,7 +39,7 @@ public class ServiceHandler extends Thread {
 						int randX = rand.nextInt(450);
 						int randY = rand.nextInt(450);
 						queueCommands.addLast(new Command(null, "ren " + randX + "|" + randY));
-						
+
 						current = System.nanoTime();
 					}
 				}
@@ -98,15 +98,18 @@ public class ServiceHandler extends Thread {
 				try {
 					Command command = queueCommands.removeFirst();
 					String message = command.getControlString();
-					if(message.startsWith(Config.MOVE_CODE)) {
+					if (message.startsWith(Config.MOVE_CODE)) {
 						sendMessageToCliet(message);
-					}
-					else if(message.startsWith(Config.STATUS_IN_GAME)) {
-						//message = message.substring(4);
-						//String[] cmds = message.split("\\|");
-						sendMessageToCliet("stt gameover");
-					}
-					else if (message.startsWith(Config.STARTGAME_CODE)) {
+					} else if (message.startsWith(Config.STATUS_IN_GAME)) {
+						message = message.substring(4);
+						String[] cmds = message.split("\\|");
+						if (cmds[1].equals("score")) {
+							message = "stt "+message;
+							sendMessageToCliet(message);
+						} else if (cmds[1].equals("die")) {
+							sendMessageToCliet("stt gameover");
+						}
+					} else if (message.startsWith(Config.STARTGAME_CODE)) {
 						message = message.substring(4);
 						if (message.equals("hoststart")) {
 							sendStartMessageToCLient();
@@ -114,9 +117,9 @@ public class ServiceHandler extends Thread {
 						}
 					} else if (message.startsWith(Config.RENDERENEMY_CODE)) {
 						sendMessageToCliet(message);
-					} 
+					}
 				} catch (Exception ex) {
-					//System.out.println("Error: " + ex);
+					// System.out.println("Error: " + ex);
 				}
 			}
 		}

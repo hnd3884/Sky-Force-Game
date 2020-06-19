@@ -8,7 +8,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -30,8 +34,6 @@ public class Communication {
 	public static String playerName;
 	public static gameSetUp gamesS;
 	public LinkedList<Command> queueCommands = new LinkedList<Command>();
-	private boolean isLogin = false;
-	// public List<Player> lstPlayers = new LinkedList<Player>();
 
 	public Communication() {
 		try {
@@ -49,9 +51,9 @@ public class Communication {
 				try {
 					while (true) {
 						String message = inFromServer.readLine();
-						//gamesS.start();
+						// gamesS.start();
 						if (message.startsWith(Config.RENDERENEMY_CODE)) {
-							gamesS.manager.PushToQueue(message);
+							gamesS.manager.RenderEnemy(message);
 						} else if (message.startsWith(Config.MOVE_CODE)) {
 							message = message.substring(4);
 							String[] query = message.split("\\|");
@@ -74,10 +76,33 @@ public class Communication {
 								gamesS.manager.setReadyToPlay(false);
 								gamesS.manager.setGameStatus("Game Over!");
 								GameOverInterface gameover = new GameOverInterface();
+
+								List<Player> scoreRank = new ArrayList<Player>();
+								scoreRank.add(gamesS.manager.player);
+								for (Player fr : gamesS.manager.friends) {
+									scoreRank.add(fr);
+								}
+								Collections.sort(scoreRank, Comparator.comparing(Player::getScore));
+
 								DefaultTableModel model = (DefaultTableModel) gameover.table.getModel();
-								model.addRow(new Object[]{gamesS.manager.player.getUserName(), gamesS.manager.GetScore()});
-								
+								// model.addRow(new Object[]{gamesS.manager.player.getUserName(),
+								// gamesS.manager.GetScore()});
+								for (int i = scoreRank.size() - 1; i >= 0; i--) {
+									model.addRow(new Object[] { scoreRank.get(i).getUserName(),
+											scoreRank.get(i).getScore() });
+								}
 								gameover.setVisible(true);
+							} else {
+								String[] mess = message.split("\\|");
+								if (mess[1].equals("score")) {
+									// System.out.println("player "+mess[0]+" scored!");
+									for (Player fr : gamesS.manager.friends) {
+										if (fr.getUserName().equals(mess[0])) {
+											fr.Score();
+											break;
+										}
+									}
+								}
 							}
 						} else if (message.startsWith(Config.STARTGAME_CODE)) {
 							message = message.substring(4);
@@ -121,10 +146,9 @@ public class Communication {
 							}
 						} else if (message.startsWith(Config.REGISTER_CODE)) {
 							message = message.substring(4);
-							if(message.equals("ok")) {
+							if (message.equals("ok")) {
 								JOptionPane.showMessageDialog(null, "Register success!");
-							}
-							else if (message.equals("failed")) {
+							} else if (message.equals("failed")) {
 								JOptionPane.showMessageDialog(null, "Username is exist!");
 							}
 						}
@@ -153,14 +177,9 @@ public class Communication {
 
 	public static void Init() {
 		try {
-			// gamesS.init();
-			//System.out.println("Connecting to TCP Server at: [" + server_ip + ":" + server_port + "]");
-			//System.out.println("Server connected. Local client port: " + clientSocket.getLocalPort());
 			inFromUser = new BufferedReader(new InputStreamReader(System.in));
 			outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-			// outToServer.writeBytes("log "+ player.getUserName() + '\n');
 
 			Receive();
 
