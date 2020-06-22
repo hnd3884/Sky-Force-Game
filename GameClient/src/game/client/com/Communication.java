@@ -75,7 +75,7 @@ public class Communication {
 								gamesS.manager.setStart(false);
 								gamesS.manager.setReadyToPlay(false);
 								gamesS.manager.setGameStatus("Game Over!");
-								GameOverInterface gameover = new GameOverInterface();
+								GameOverInterface gameover = new GameOverInterface(gamesS, playerName);
 
 								List<Player> scoreRank = new ArrayList<Player>();
 								scoreRank.add(gamesS.manager.player);

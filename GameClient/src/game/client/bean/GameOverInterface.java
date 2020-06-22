@@ -13,12 +13,21 @@ import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
+import game.client.com.Communication;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 public class GameOverInterface extends JFrame {
 
 	public static JPanel contentPane;
 	public static JTable table;
+	public static gameSetUp gamesS;
+	private String username;
 
-	public GameOverInterface() {
+	public GameOverInterface(gameSetUp comm, String username) {
+		this.gamesS = comm;
+		this.username = username;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 379, 354);
 		contentPane = new JPanel();
@@ -44,12 +53,14 @@ public class GameOverInterface extends JFrame {
 		table.setBounds(12, 56, 341, 192);
 		contentPane.add(table);
 		
-		JButton btnNewButton = new JButton("Play Again");
-		btnNewButton.setBounds(12, 261, 97, 25);
-		contentPane.add(btnNewButton);
-		
 		JButton btnQuit = new JButton("Quit");
-		btnQuit.setBounds(252, 261, 97, 25);
+		btnQuit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		
+		btnQuit.setBounds(86, 261, 189, 33);
 		contentPane.add(btnQuit);
 	}
 }

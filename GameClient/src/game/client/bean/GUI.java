@@ -150,7 +150,7 @@ public class GUI implements ActionListener {
 				// handle if click LOGIN
 				String uname = username_su.getText();
 				String pw = password_su.getText();
-				if (uname != "" && pw != null) {
+				if (!uname.equals("") && !pw.equals("")) {
 					String messageReg = "reg " + uname + "|" + pw;
 					comm.Send(messageReg);
 				} else {
