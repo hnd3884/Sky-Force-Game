@@ -57,32 +57,12 @@ public class gameManager implements KeyListener {
 	}
 	
 	public void RenderEnemy(String message) {
-		queueCommands.addLast(new Command(null, message));
-	}
-	
-	public void RenderEnemies() {
-		Runnable run = new Runnable() {
-			@Override
-			public void run() {
-				while(true) {
-					if(!queueCommands.isEmpty()) {
-						Command cmd = queueCommands.removeFirst();
-						String message = cmd.getCommand();
-						if(message.startsWith(Config.RENDERENEMY_CODE)) {
-							if (health > 0) {
-								message = message.substring(4);
-								String[] coordinates = message.split("\\|");
-								int randX = Integer.parseInt(coordinates[0]);
-								int randY = Integer.parseInt(coordinates[1]);
-								enemies.add(new Enemy(randX, -randY));
-							}
-						}
-					}
-				}
-			}
-		};
-		Thread renderEnemies = new Thread(run);
-		renderEnemies.start();
+		//queueCommands.addLast(new Command(null, message));
+		message = message.substring(4);
+		String[] coordinates = message.split("\\|");
+		int randX = Integer.parseInt(coordinates[0]);
+		int randY = Integer.parseInt(coordinates[1]);
+		enemies.add(new Enemy(randX, -randY));
 	}
 
 	public void init() {
@@ -131,7 +111,6 @@ public class gameManager implements KeyListener {
 				if (bullet.get(i).getY() <= 50) {
 					bullet.remove(i);
 					i--;
-
 				}
 			}
 
@@ -205,7 +184,7 @@ public class gameManager implements KeyListener {
 	}
 	
 	public void StartByHost() {
-		RenderEnemies();
+		//RenderEnemies();
 		start = true;
 		init();
 	}
@@ -217,7 +196,7 @@ public class gameManager implements KeyListener {
 				String message = "sta hoststart";
 				Communication.Send(message);
 			}
-			RenderEnemies();
+			//RenderEnemies();
 			start = true;
 			init();
 		}
