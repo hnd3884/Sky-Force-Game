@@ -6,3 +6,4 @@ Game lập trình mạng :))
 1. Import Client Project
 2. Import Server Project
 3. Change file path of Database.txt in Entity.java
+4. Run Server before run project
